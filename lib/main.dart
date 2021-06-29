@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Habit Tracker',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -17,60 +17,80 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: NavDrawer(),
-      appBar: AppBar(
-        title: Text('Side menu'),
-      ),
-      body: Center(
-        child: Text('Side Menu Tutorial'),
-      ),
-    );
+  State<MainPage> createState() {
+    return MainPageState();
   }
 }
 
-class NavDrawer extends StatelessWidget {
+class MainPageState extends State<MainPage> {
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
+  VoidCallback? _showPersistantBottomSheetCallBack;
+
+  @override
+  void initState() {
+    super.initState();
+    _showPersistantBottomSheetCallBack = showBottomSheet;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            child: Text(
-              'Side menu',
-              style: TextStyle(color: Colors.white, fontSize: 25),
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.input),
-            title: Text('Welcome'),
-            onTap: () => {},
-          ),
-          ListTile(
-            leading: Icon(Icons.verified_user),
-            title: Text('Profile'),
-            onTap: () => {Navigator.of(context).pop()},
-          ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
-            onTap: () => {Navigator.of(context).pop()},
-          ),
-          ListTile(
-            leading: Icon(Icons.border_color),
-            title: Text('Feedback'),
-            onTap: () => {Navigator.of(context).pop()},
-          ),
-          ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
-            onTap: () => {Navigator.of(context).pop()},
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: Text('Side menu'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.filter_alt_outlined),
+            tooltip: 'OpenFilters',
+            onPressed: _showPersistantBottomSheetCallBack,
           ),
         ],
+      ),
+      body: Center(child: Text('Ololo')),
+    );
+  }
+
+  void showBottomSheet() {
+    setState(() {
+      _showPersistantBottomSheetCallBack = null;
+    });
+
+    _scaffoldKey.currentState
+        ?.showBottomSheet(
+          (context) {
+            return new Container(
+              height: 200.0,
+              color: Colors.teal[100],
+              child: Center(
+                child: Text(
+                  "Drag Downwards Or Back To Dismiss Sheet",
+                  style: TextStyle(fontSize: 18, color: Colors.black),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          },
+        )
+        .closed
+        .whenComplete(() {
+          if (mounted) {
+            setState(() {
+              _showPersistantBottomSheetCallBack = showBottomSheet;
+            });
+          }
+        });
+  }
+}
+
+class FilterFragment extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.amber,
+      child: Center(
+        child: Text('Фильтрация'),
       ),
     );
   }

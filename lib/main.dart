@@ -65,6 +65,7 @@ class MainPageState extends State<MainPage> {
       ),
     );
   }
+
   void showBottomSheet() {
     setState(() {
       _showPersistantBottomSheetCallBack = null;
@@ -104,51 +105,71 @@ class HabitItemState extends State<HabitItem> {
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
-      child: Column(
-        children: [
-          Container(
-            height: 64,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            'Name',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Text(
-                            '30.02.2077 +5',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            Container(
+              height: 64,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Name',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            Text(
+                              '30.02.2077 +5',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    child: Text("Priority"),
-                  ),
-                  Container(
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_drop_down_sharp),
-                      onPressed: () { setState(() {
-                            _hiddenState = !_hiddenState;
-                        });
-                      },
+                    Container(
+                      child: Text('Priority'),
                     ),
-                  ),
-                ],
+                    Container(
+                      child: IconButton(
+                        icon: _hiddenState
+                            ? const Icon(Icons.arrow_drop_down_sharp)
+                            : const Icon(Icons.arrow_drop_up_sharp),
+                        onPressed: () {
+                          setState(() {
+                            _hiddenState = !_hiddenState;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          if(!_hiddenState) Text("Description")
-        ],
+            if (!_hiddenState) buildHiddenProperties(),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget buildHiddenProperties() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [Text('Number of completed'), Text('still need')],
+        ),
+        Text('Description')
+      ],
     );
   }
 }

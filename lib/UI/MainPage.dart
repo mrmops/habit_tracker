@@ -1,0 +1,84 @@
+import 'package:flutter/material.dart';
+
+import 'FilteringOptionsWidget.dart';
+import 'HabitsListWidget.dart';
+
+class MainPage extends StatefulWidget {
+  @override
+  State<MainPage> createState() {
+    return MainPageState();
+  }
+}
+
+class MainPageState extends State<MainPage> {
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
+  VoidCallback? _showPersistantBottomSheetCallBack;
+
+  @override
+  void initState() {
+    super.initState();
+    _showPersistantBottomSheetCallBack = showBottomSheet;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text('Habits'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.filter_alt_outlined),
+              tooltip: 'Открыть фильтры!',
+              onPressed: _showPersistantBottomSheetCallBack,
+            ),
+          ],
+          bottom: TabBar(
+            tabs: [
+              Tab(text: 'Плохие привычки'),
+              Tab(text: 'Хорошие привычки'),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            HabitsListWidget(),
+            HabitsListWidget(),
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          tooltip: 'Добавить привычку!',
+        ),
+      ),
+    );
+  }
+
+  void showBottomSheet() {
+    setState(() {
+      _showPersistantBottomSheetCallBack = null;
+    });
+
+    _scaffoldKey.currentState
+        ?.showBottomSheet(
+          (context) {
+            return FilteringOptionsWidget();
+          },
+        )
+        .closed
+        .whenComplete(() {
+          if (mounted) {
+            setState(() {
+              _showPersistantBottomSheetCallBack = showBottomSheet;
+            });
+          }
+        });
+  }
+}

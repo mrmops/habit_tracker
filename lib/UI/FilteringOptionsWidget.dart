@@ -9,14 +9,6 @@ class FilteringOptionsWidget extends StatelessWidget {
       child: Row(
         verticalDirection: VerticalDirection.down,
         children: [
-          // Expanded( // wrap your Column in Expanded
-          //   child: Wrap(
-          //     children: <Widget>[
-          //       Text('item 2'),
-          //       Container(child: TextField()),
-          //     ],
-          //   ),
-          // ),
           Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,

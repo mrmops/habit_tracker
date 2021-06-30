@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-
+import 'package:habit_tracker/UI/HabitsDetails/HabitAddOrEditPage.dart';
 import 'FilteringOptionsWidget.dart';
 import 'HabitsListWidget.dart';
 
 class MainPage extends StatefulWidget {
+  static const String routeKey = 'MainPageKey';
+
   @override
   State<MainPage> createState() {
     return MainPageState();
@@ -50,7 +52,7 @@ class MainPageState extends State<MainPage> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () => Navigator.pushNamed(context, HabitAddOrEditPage.routingKey),
           child: const Icon(
             Icons.add,
             color: Colors.white,

@@ -26,7 +26,10 @@ class NetworkRepositoryImp extends NetworkRepository {
 
   @override
   Future<List<HabitModel>> getHabits() async {
-    return _mapper.mapIterable(await _retrofitClient.getHabits()).toList();
+    var habitsListDto = (await _retrofitClient.getHabits());
+    if(habitsListDto.habits == null)
+      return List.empty();
+    return _mapper.mapIterable(habitsListDto.habits!).toList();
   }
 
   @override

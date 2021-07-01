@@ -1,9 +1,9 @@
-class Habit {
+class HabitModel {
   String _id;
   String get id => _id;
   String name = '';
   String? description;
-  DateTime date = DateTime.now();
+  DateTime dateOfUpdate = DateTime.now();
   List<DateTime> _doneDates = List.empty();
   List<DateTime> get doneDates => _doneDates;
   HabitType type;
@@ -11,16 +11,20 @@ class Habit {
   int frequency;
   int count;
 
-  Habit(this._id,
+  HabitModel(this._id,
       {this.name = '',
       this.description = '',
       this.type = HabitType.GOOD,
       this.priority = HabitPriority.NORMAL,
       this.frequency = 1,
       this.count = 1,
-      doneDates}){
+      List<DateTime>? doneDates,
+      DateTime? dateOfUpdate}){
      if(doneDates != null)
         this._doneDates = doneDates;
+
+     if(dateOfUpdate != null)
+       this.dateOfUpdate = dateOfUpdate;
   }
 }
 

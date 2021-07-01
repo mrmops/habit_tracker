@@ -16,97 +16,104 @@ class HabitAddOrEditPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('AddOrEditHabit'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: textEditingController,
-              initialValue: null,
-              maxLength: 40,
-              decoration: InputDecoration(
-                icon: Icon(Icons.drive_file_rename_outline),
-                labelText: 'Имя привычки',
-                suffix: IconButton(
-                  icon: Icon(
-                    Icons.delete,
-                  ),
-                  onPressed: () {
-                    textEditingController.clear();
-                  },
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFF6200EE)),
-                ),
-              ),
-            ),
-            TextFormField(
-              initialValue:
-                  'Перестать давать еду собаке когда она просит, даже если она делает очень красивые глазки, она не голодная!',
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              decoration: InputDecoration(
-                labelText: 'Описание',
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFF6200EE)),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(child: HabitTypeRadio()),
-                  PriorityWidget(),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      labelText: 'Количество повторений',
-                      helperText:
-                          'Количество повторений, которое необходимо выполниться за указанный период',
-                      helperMaxLines: 2,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF6200EE)),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextFormField(
+                controller: textEditingController,
+                initialValue: null,
+                maxLength: 40,
+                decoration: InputDecoration(
+                  labelText: 'Имя привычки',
+                  suffix: SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: IconButton(
+                      padding: new EdgeInsets.all(0.0),
+                      iconSize: 24,
+                      icon: Icon(
+                        Icons.delete,
                       ),
+                      onPressed: () {
+                        textEditingController.clear();
+                      },
                     ),
                   ),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      labelText: 'Периодичность',
-                      helperText:
-                          'Количество дней, за которые необходимо сделать указанное количество повторений',
-                      helperMaxLines: 2,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF6200EE)),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFF6200EE)),
+                  ),
+                ),
+              ),
+              TextFormField(
+                initialValue:
+                    'Перестать давать еду собаке когда она просит, даже если она делает очень красивые глазки, она не голодная!',
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                decoration: InputDecoration(
+                  labelText: 'Описание',
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFF6200EE)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: HabitTypeRadio()),
+                    PriorityWidget(),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        labelText: 'Количество повторений',
+                        helperText:
+                            'Количество повторений, которое необходимо выполниться за указанный период',
+                        helperMaxLines: 2,
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFF6200EE)),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        labelText: 'Периодичность',
+                        helperText:
+                            'Количество дней, за которые необходимо сделать указанное количество повторений',
+                        helperMaxLines: 2,
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFF6200EE)),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: MaterialButton(
-                color:  Color(0xFF6200EE),
-                child: Text('Сохранить'),
-                onPressed: () => Navigator.pop(context),
+              Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: MaterialButton(
+                  color:  Color(0xFF6200EE),
+                  child: Text('Сохранить'),
+                  onPressed: () => Navigator.pop(context),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

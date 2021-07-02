@@ -1,4 +1,4 @@
-import 'package:habit_tracker/data/database/Models/habit.dart';
+import 'package:habit_tracker/domain/Models/habit.dart';
 
 abstract class NetworkRepository{
   Future<List<HabitModel>> getHabits();

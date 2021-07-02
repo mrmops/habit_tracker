@@ -1,4 +1,4 @@
-import 'package:habit_tracker/data/database/Models/habit.dart';
+import 'package:habit_tracker/domain/Models/habit.dart';
 import 'package:habit_tracker/infostructure/base_mapper.dart';
 
 import '../habit_dto.dart';
@@ -6,7 +6,8 @@ import '../habit_dto.dart';
 class HabitDtoMapper extends BaseMapper<HabitModel, HabitDto> {
   @override
   HabitModel map(HabitDto r) {
-    return HabitModel(r.id,
+    return HabitModel(
+        serverId: r.id,
         name: r.title ?? '',
         description: r.description,
         type: r.type ?? HabitType.GOOD,
@@ -19,7 +20,7 @@ class HabitDtoMapper extends BaseMapper<HabitModel, HabitDto> {
 
   @override
   HabitDto revertMap(HabitModel t) {
-    return HabitDto(id: t.id,
+    return HabitDto(id: t.serverId,
         title: t.name,
         description: t.description,
         type: t.type,

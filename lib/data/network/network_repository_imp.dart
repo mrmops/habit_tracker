@@ -1,8 +1,8 @@
 import 'package:habit_tracker/data/network/dtos/date_time_dto.dart';
-import 'package:habit_tracker/data/database/Models/habit.dart';
 import 'package:habit_tracker/data/network/dtos/habit_dto.dart';
 import 'package:habit_tracker/data/network/Retrofit/retrofit_client.dart';
-import 'package:habit_tracker/data/network/network_repository.dart';
+import 'package:habit_tracker/domain/Models/habit.dart';
+import 'package:habit_tracker/domain/interfaces/habit_network_repository.dart';
 import 'package:habit_tracker/infostructure/base_mapper.dart';
 
 class NetworkRepositoryImp extends NetworkRepository {
@@ -13,7 +13,7 @@ class NetworkRepositoryImp extends NetworkRepository {
 
   @override
   Future<String> addHabit(HabitModel dto) async =>
-      (await _retrofitClient.addHabit(_mapper.revertMap(dto))).id;
+      (await _retrofitClient.addHabit(_mapper.revertMap(dto))).id!;
 
   @override
   Future<bool> deleteHabit(String id) async =>

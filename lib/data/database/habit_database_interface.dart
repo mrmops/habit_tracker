@@ -1,15 +1,37 @@
+import 'package:habit_tracker/domain/Models/habit.dart';
+import 'package:moor_flutter/moor_flutter.dart';
+
 import 'Imp/habit_database_imp.dart';
 
 abstract class HabitDataBase {
+  Stream<List<Habit>> watchAllHabits();
+
   Future<List<Habit>> getAllHabits();
 
-  Future<Habit> getHabitById(String id);
+  Stream<Habit> watchHabitByServerId(String id);
 
-  Future<List<Habit>> getHabitsOrderByDate();
+  Future<Habit?> getHabitByServerId(String? id);
 
-  Future<List<Habit>> getHabitsDescOrderByDate();
+  Stream<Habit> watchHabitById(int id);
 
-  Future insertHabit(Habit habit);
+  Future<Habit> getHabitById(int id);
 
-  Future updateHabit(Habit habit);
+  Stream<List<Habit>> watchHabitsOrderByDate(
+      {OrderingMode orderDirection = OrderingMode.asc});
+
+  Future<List<Habit>> getHabitsOrderByDate(
+      {OrderingMode orderDirection = OrderingMode.asc});
+
+  Future<int> insertHabit(
+      String? serverId,
+      String name,
+      String? description,
+      DateTime date,
+      List<DateTime> dates,
+      HabitType habitType,
+      HabitPriority habitPriority,
+      int frequency,
+      int count);
+
+  Future<int> updateHabit(Habit habit);
 }

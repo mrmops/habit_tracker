@@ -1,4 +1,4 @@
-import 'package:habit_tracker/data/database/Models/habit.dart';
+import 'package:habit_tracker/domain/Models/habit.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:habit_tracker/data/network/Dtos/date_time_dto.dart';
 
@@ -6,7 +6,7 @@ part 'habit_dto.g.dart';
 
 @JsonSerializable()
 class HabitDto {
-  String id;
+  String? id;
   String? title = '';
   int? color = 0;
   String? description;
@@ -52,10 +52,18 @@ class HabitDto {
       habitPriority?.index;
 
   static List<int>? datesToDto(List<DateTime>? dates) {
-    return dates?.map((e) => DateTimeDto.dateToJson(e)).toList();
+    return dates?.map((e) => dateToJson(e)).toList();
   }
 
   static List<DateTime>? datesFromDto(List<int>? dates) {
-    return dates?.map((e) => DateTimeDto.dateFromJson(e)).toList();
+    return dates?.map((e) => dateFromJson(e)).toList();
+  }
+
+  static DateTime dateFromJson(int json) {
+    return DateTime.fromMillisecondsSinceEpoch(json);
+  }
+
+  static int dateToJson(DateTime dateTime) {
+    return dateTime.millisecondsSinceEpoch;
   }
 }

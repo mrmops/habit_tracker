@@ -1,46 +1,14 @@
-import 'package:habit_tracker/data/database/Models/habit.dart';
 import 'package:habit_tracker/data/database/habit_database_interface.dart';
+import 'package:habit_tracker/domain/Models/habit.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 import 'Converters/datetime_list_converter.dart';
 
 part 'habit_database_imp.g.dart';
 
-@UseMoor(tables: [Habits])
-class HabitDataBaseImp extends _$HabitDataBaseImp implements HabitDataBase {
-  HabitDataBaseImp()
-      : super(FlutterQueryExecutor.inDatabaseFolder(
-      path: 'habitDb.sqlite', logStatements: true));
-
-  @override
-  int get schemaVersion => 1;
-
-  @override
-  Future<List<Habit>> getAllHabits() => select(habits).get();
-
-  @override
-  Future<Habit> getHabitById(String id) async => (select(habits)..where((tbl)
-  => tbl.id.equals(id)))
-      .getSingle();
-
-  @override
-  Future<List<Habit>> getHabitsOrderByDate()
-  => (select(habits)..orderBy([(x) => OrderingTerm.asc(x.date)]))
-      .get();
-
-  @override
-  Future<List<Habit>> getHabitsDescOrderByDate()
-  => (select(habits)..orderBy([(x) => OrderingTerm.desc(x.date)]))
-      .get();
-
-  @override
-  Future insertHabit(Habit habit) => into(habits).insert(habit, mode: InsertMode.insertOrReplace);
-
-  @override
-  Future updateHabit(Habit habit) => update(habits).replace(habit);
-}
-
 class Habits extends Table {
-  TextColumn get id => text()();
+  IntColumn get id => integer().autoIncrement()();
+
+  TextColumn get serverId => text().nullable()();
 
   TextColumn get name => text()();
 
@@ -57,4 +25,84 @@ class Habits extends Table {
   IntColumn get frequency => integer()();
 
   IntColumn get count => integer()();
+}
+
+@UseMoor(tables: [Habits])
+class HabitDataBaseImp extends _$HabitDataBaseImp implements HabitDataBase {
+  HabitDataBaseImp()
+      : super(FlutterQueryExecutor.inDatabaseFolder(
+            path: 'habitDb.sqlite', logStatements: true));
+
+  @override
+  int get schemaVersion => 1;
+
+  @override
+  Stream<List<Habit>> watchAllHabits() => select(habits).watch();
+
+  @override
+  Future<List<Habit>> getAllHabits() => select(habits).get();
+
+  @override
+  Stream<Habit> watchHabitByServerId(String serverId) =>
+      (select(habits)..where((tbl) => tbl.serverId.equals(serverId)))
+          .watchSingle();
+
+  @override
+  Future<Habit?> getHabitByServerId(String? serverId) => (select(habits)
+        ..where((tbl) => tbl.serverId.isNotNull())
+        ..where((tbl) => tbl.serverId.equals(serverId)))
+      .getSingle();
+
+  @override
+  Stream<Habit> watchHabitById(int id) =>
+      (select(habits)..where((tbl) => tbl.id.equals(id))).watchSingle();
+
+  @override
+  Future<Habit> getHabitById(int id) =>
+      (select(habits)..where((tbl) => tbl.id.equals(id))).getSingle();
+
+  @override
+  Stream<List<Habit>> watchHabitsOrderByDate(
+          {OrderingMode orderDirection = OrderingMode.asc}) =>
+      (select(habits)
+            ..orderBy([
+              (x) => OrderingTerm(expression: x.date, mode: orderDirection)
+            ]))
+          .watch();
+
+  @override
+  Future<List<Habit>> getHabitsOrderByDate(
+          {OrderingMode orderDirection = OrderingMode.asc}) =>
+      (select(habits)
+            ..orderBy([
+              (x) => OrderingTerm(expression: x.date, mode: orderDirection)
+            ]))
+          .get();
+
+  @override
+  Future<int> insertHabit(
+          String? serverId,
+          String name,
+          String? description,
+          DateTime date,
+          List<DateTime> dates,
+          HabitType habitType,
+          HabitPriority habitPriority,
+          int frequency,
+          int count) =>
+      into(habits).insert(
+          HabitsCompanion.insert(
+              serverId: Value(serverId),
+              name: name,
+              date: date,
+              dates: dates,
+              habitType: habitType,
+              habitPriority: habitPriority,
+              frequency: frequency,
+              count: count),
+          mode: InsertMode.insertOrReplace);
+
+  @override
+  Future<int> updateHabit(Habit habit) =>
+      into(habits).insert(habit, mode: InsertMode.insertOrReplace);
 }

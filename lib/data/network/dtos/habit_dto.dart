@@ -7,19 +7,22 @@ part 'habit_dto.g.dart';
 @JsonSerializable()
 class HabitDto {
   String id;
-  String title = '';
-  int color = 0;
+  String? title = '';
+  int? color = 0;
   String? description;
-  @JsonKey(name: 'date', toJson: DateTimeDto.dateToJson, fromJson: DateTimeDto.dateFromJson)
-  DateTime dateOfUpdate = DateTime.now();
+  @JsonKey(
+      name: 'date',
+      toJson: DateTimeDto.dateToJson,
+      fromJson: DateTimeDto.dateFromJson)
+  DateTime? dateOfUpdate = DateTime.now();
   @JsonKey(toJson: datesToDto, fromJson: datesFromDto)
-  List<DateTime> doneDates = List.empty();
+  List<DateTime>? doneDates = List.empty();
   @JsonKey(fromJson: typeFromJson, toJson: typeToJson)
-  HabitType type;
+  HabitType? type;
   @JsonKey(fromJson: priorityFromJson, toJson: priorityToJson)
-  HabitPriority priority;
-  int frequency;
-  int count;
+  HabitPriority? priority;
+  int? frequency;
+  int? count;
 
   HabitDto(
       {required this.id,
@@ -37,21 +40,22 @@ class HabitDto {
 
   Map<String, dynamic> toJson() => _$HabitDtoToJson(this);
 
-  static HabitType typeFromJson(int intHabitType) =>
-      HabitType.values[intHabitType];
+  static HabitType? typeFromJson(int? intHabitType) =>
+      intHabitType != null ? HabitType.values[intHabitType] : null;
 
-  static int typeToJson(HabitType habitType) => habitType.index;
+  static int? typeToJson(HabitType? habitType) => habitType?.index;
 
-  static HabitPriority priorityFromJson(int intHabitPriority) =>
-      HabitPriority.values[intHabitPriority];
+  static HabitPriority? priorityFromJson(int? intHabitPriority) =>
+      intHabitPriority != null ? HabitPriority.values[intHabitPriority] : null;
 
-  static int priorityToJson(HabitPriority habitPriority) => habitPriority.index;
+  static int? priorityToJson(HabitPriority? habitPriority) =>
+      habitPriority?.index;
 
-  static List<int> datesToDto(List<DateTime> dates) {
-      return dates.map((e) => DateTimeDto.dateToJson(e)).toList();
+  static List<int>? datesToDto(List<DateTime>? dates) {
+    return dates?.map((e) => DateTimeDto.dateToJson(e)).toList();
   }
 
-  static List<DateTime> datesFromDto(List<int> dates) {
-    return dates.map((e) => DateTimeDto.dateFromJson(e)).toList();
+  static List<DateTime>? datesFromDto(List<int>? dates) {
+    return dates?.map((e) => DateTimeDto.dateFromJson(e)).toList();
   }
 }

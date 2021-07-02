@@ -20,20 +20,18 @@ class NetworkRepositoryImp extends NetworkRepository {
       (await _retrofitClient.deleteHabit(id)).success;
 
   @override
-  Future<bool> doneHabit(DateTime dto) async {
-    return (await _retrofitClient.doneHabit(DateTimeDto(dto))).success;
-  }
+  Future<bool> doneHabit(DateTime dto) async =>
+      (await _retrofitClient.doneHabit(DateTimeDto(dto))).success;
 
   @override
   Future<List<HabitModel>> getHabits() async {
     var habitsListDto = (await _retrofitClient.getHabits());
-    if(habitsListDto.habits == null)
-      return List.empty();
+    if (habitsListDto.habits == null) return List.empty();
+
     return _mapper.mapIterable(habitsListDto.habits!).toList();
   }
 
   @override
-  Future<bool> patchHabit(String id, HabitModel habit) async {
-    return (await _retrofitClient.patchHabit(id, _mapper.revertMap(habit))).success;
-  }
+  Future<bool> patchHabit(String id, HabitModel habit) async =>
+      (await _retrofitClient.patchHabit(id, _mapper.revertMap(habit))).success;
 }

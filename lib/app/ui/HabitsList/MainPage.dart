@@ -24,40 +24,49 @@ class MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: Text('Habits'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.filter_alt_outlined),
-              tooltip: 'Открыть фильтры!',
-              onPressed: _showPersistantBottomSheetCallBack,
+    return BlocProvider<HabitsListBloc>(
+      create: (context) => HabitsListBloc(context.read()),
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            title: Text('Habits'),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.filter_alt_outlined),
+                tooltip: 'Открыть фильтры!',
+                onPressed: _showPersistantBottomSheetCallBack,
+              ),
+            ],
+            bottom: TabBar(
+              tabs: [
+                Tab(text: 'Плохие привычки'),
+                Tab(text: 'Хорошие привычки'),
+              ],
             ),
-          ],
-          bottom: TabBar(
-            tabs: [
-              Tab(text: 'Плохие привычки'),
-              Tab(text: 'Хорошие привычки'),
+          ),
+          body: TabBarView(
+            children: [
+              BlocBuilder<HabitsListBloc, List<HabitModel>>(
+                  builder: (context, state) =>
+                      HabitsListWidget(context.read<HabitsListBloc>())),
+              BlocBuilder<HabitsListBloc, List<HabitModel>>(
+                  builder: (context, state) =>
+                      HabitsListWidget(context.read<HabitsListBloc>())),
             ],
           ),
-        ),
-        body: TabBarView(
-          children: [
-            HabitsListWidget(),
-            HabitsListWidget(),
-          ],
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.pushNamed(context, HabitAddOrEditPage.routingKey),
-          child: const Icon(
-            Icons.add,
-            color: Colors.white,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.miniEndFloat,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () =>
+                Navigator.pushNamed(context, HabitAddOrEditPage.routingKey),
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            tooltip: 'Добавить привычку!',
           ),
-          tooltip: 'Добавить привычку!',
         ),
       ),
     );

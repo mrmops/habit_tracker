@@ -10,14 +10,12 @@ class HabitServiceImp extends HabitService {
 
   HabitDatabaseRepository _databaseRepository;
   HabitNetworkRepository _networkRepository;
-  SharedPreferences _sharedPreferences;
 
-  HabitServiceImp(this._databaseRepository, this._networkRepository,
-      this._sharedPreferences);
+  HabitServiceImp(this._databaseRepository, this._networkRepository);
 
   @override
   Future addLocalHabitsToServer() async {
-    var date = findLastUpdateDate();
+    var date = await findLastUpdateDate();
     var localHabits = await _databaseRepository.getHabitsUpdatedAfter(date);
 
     for (var habit in localHabits) {
@@ -31,7 +29,8 @@ class HabitServiceImp extends HabitService {
       }
     }
 
-    _sharedPreferences.setString(
+    var sharedPreferences = (await SharedPreferences.getInstance());
+    sharedPreferences.setString(
         lastDateOfUpdateKey, DateTime.now().toIso8601String());
   }
 
@@ -84,7 +83,7 @@ class HabitServiceImp extends HabitService {
 
   @override
   Future<void> updateHabitsFromServer() async {
-    var date = findLastUpdateDate();
+    var date = await findLastUpdateDate();
 
     var habits = await _networkRepository.getHabits();
     var millisecondsSinceEpoch2 = date.millisecondsSinceEpoch;
@@ -95,8 +94,9 @@ class HabitServiceImp extends HabitService {
     }
   }
 
-  DateTime findLastUpdateDate() {
-    var dateOfUpdate = _sharedPreferences.getString(lastDateOfUpdateKey);
+  Future<DateTime> findLastUpdateDate() async {
+    var sharedPreferences = (await SharedPreferences.getInstance());
+    var dateOfUpdate = sharedPreferences.getString(lastDateOfUpdateKey);
     return dateOfUpdate == null ? DateTime(1970) : DateTime.parse(dateOfUpdate);
   }
 

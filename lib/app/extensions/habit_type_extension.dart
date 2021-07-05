@@ -1,7 +1,4 @@
-enum HabitType{
-  GOOD,
-  BAD
-}
+import 'package:habit_tracker/domain/Models/habit.dart';
 
 extension HabitTypeExtensions on HabitType{
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:habit_tracker/UI/HabitsDetails/HabitAddOrEditPage.dart';
 
-import 'UI/HabitsList/MainPage.dart';
+import 'app/UI/HabitsDetails/HabitAddOrEditPage.dart';
+import 'app/UI/HabitsList/MainPage.dart';
 
 void main() {
   runApp(MyApp());

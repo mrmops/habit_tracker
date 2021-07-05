@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:habit_tracker/UI/HabitsDetails/HabitAddOrEditPage.dart';
+import 'package:habit_tracker/app/UI/HabitsDetails/HabitAddOrEditPage.dart';
 import 'FilteringOptionsWidget.dart';
 import 'HabitsListWidget.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:habit_tracker/Models/HabitType.dart';
-import 'package:habit_tracker/Models/Priority.dart';
+import 'package:habit_tracker/domain/Models/habit.dart';
+import 'package:habit_tracker/app/extensions/habit_priority_extensions.dart';
 
 class HabitAddOrEditPage extends StatelessWidget {
   static const routingKey = 'HabitAddOrEditPage';
@@ -65,7 +65,7 @@ class HabitAddOrEditPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(child: HabitTypeRadio()),
-                    PriorityWidget(),
+                    HabitPriorityWidget(),
                   ],
                 ),
               ),
@@ -181,15 +181,15 @@ class HabitTypeRadioState extends State<HabitTypeRadio> {
   }
 }
 
-class PriorityWidget extends StatefulWidget {
+class HabitPriorityWidget extends StatefulWidget {
   @override
-  State<PriorityWidget> createState() {
-    return PriorityState();
+  State<HabitPriorityWidget> createState() {
+    return HabitPriorityState();
   }
 }
 
-class PriorityState extends State<PriorityWidget> {
-  var dropdownValue = Priority.LOW;
+class HabitPriorityState extends State<HabitPriorityWidget> {
+  var dropdownValue = HabitPriority.LOW;
 
   @override
   Widget build(BuildContext context) {
@@ -197,7 +197,7 @@ class PriorityState extends State<PriorityWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Приоритетность привычки'),
-        DropdownButton<Priority>(
+        DropdownButton<HabitPriority>(
             value: dropdownValue,
             icon: const Icon(Icons.arrow_downward),
             iconSize: 18,
@@ -206,19 +206,21 @@ class PriorityState extends State<PriorityWidget> {
               height: 2,
               color: Colors.deepPurpleAccent,
             ),
-            onChanged: (Priority? newValue) {
+            onChanged: (HabitPriority? newValue) {
               setState(() {
                 dropdownValue = newValue!;
               });
             },
-            items: Priority.values
-                .map<DropdownMenuItem<Priority>>((Priority value) {
-              return DropdownMenuItem<Priority>(
+            items: HabitPriority.values
+                .map<DropdownMenuItem<HabitPriority>>((HabitPriority value) {
+              return DropdownMenuItem<HabitPriority>(
                 value: value,
-                child: Text(value.localizedString ?? ''),
+                child: Text(value.localizedString),
               );
             }).toList()),
       ],
     );
   }
 }
+
+

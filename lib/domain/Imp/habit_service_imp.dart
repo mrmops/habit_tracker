@@ -46,10 +46,11 @@ class HabitServiceImp extends HabitService {
   }
 
   @override
-  Stream<List<HabitModel>> getHabits(String filter, bool revertSort) {
+  Stream<List<HabitModel>> getHabits(String? filter, bool revertSort) {
     return _databaseRepository.watchHabitModelsOrderByDate(revertSort).map(
-        (event) =>
-            event.where((element) => element.name.contains(filter)).toList());
+        (event) => filter == null
+            ? event
+            : event.where((element) => element.name.contains(filter)).toList());
   }
 
   @override

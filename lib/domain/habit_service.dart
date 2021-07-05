@@ -2,7 +2,7 @@ import 'Models/habit.dart';
 
 abstract class HabitService{
 
-  Stream<List<HabitModel>> getHabits(String filter, bool revertSort);
+  Stream<List<HabitModel>> getHabits(String? filter, bool revertSort);
 
   Future updateHabitsFromServer();
 

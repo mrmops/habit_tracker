@@ -1,6 +1,6 @@
 import 'package:habit_tracker/domain/Models/habit.dart';
 
-abstract class NetworkRepository{
+abstract class HabitNetworkRepository{
   Future<List<HabitModel>> getHabits();
   
   Future<String> addHabit(HabitModel dto);

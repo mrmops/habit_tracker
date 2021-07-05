@@ -5,7 +5,7 @@ import 'package:habit_tracker/domain/Models/habit.dart';
 import 'package:habit_tracker/domain/interfaces/habit_network_repository.dart';
 import 'package:habit_tracker/infostructure/base_mapper.dart';
 
-class NetworkRepositoryImp extends NetworkRepository {
+class NetworkRepositoryImp extends HabitNetworkRepository {
   RetrofitClient _retrofitClient;
   BaseMapper<HabitModel, HabitDto> _mapper;
 

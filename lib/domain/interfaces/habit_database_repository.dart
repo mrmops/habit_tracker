@@ -7,6 +7,10 @@ abstract class HabitDatabaseRepository{
 
   Future<List<HabitModel>> getAllHabitModels();
 
+  Stream<List<HabitModel>> watchHabitsUpdatedAfter(DateTime date);
+
+  Future<List<HabitModel>> getHabitsUpdatedAfter(DateTime date);
+
   Stream<HabitModel> watchHabitModelByServerId(String id);
 
   Future<HabitModel?> getHabitModelByServerId(String id);

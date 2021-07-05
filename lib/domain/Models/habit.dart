@@ -1,9 +1,7 @@
 class HabitModel {
   int? id;
 
-  String? _serverId;
-
-  String? get serverId => _serverId;
+  String? serverId;
 
   String name = '';
   String? description;
@@ -20,7 +18,7 @@ class HabitModel {
 
   HabitModel(
       {this.id,
-      String? serverId,
+      this.serverId,
       this.name = '',
       this.description = '',
       this.type = HabitType.GOOD,
@@ -32,8 +30,6 @@ class HabitModel {
     if (doneDates != null) this._doneDates = doneDates;
 
     if (dateOfUpdate != null) this.dateOfUpdate = dateOfUpdate;
-
-    this._serverId = serverId;
   }
 }
 

@@ -119,4 +119,14 @@ class HabitDatabaseWrapperImp extends HabitDatabaseRepository {
     habitModel.id = habitId;
     return habitId;
   }
+
+  @override
+  Future<List<HabitModel>> getHabitsUpdatedAfter(DateTime date) async {
+    return (await _habitDataBase.getHabitsUpdatedAfter(date)).map((e) => _mapper.map(e)).toList();
+  }
+
+  @override
+  Stream<List<HabitModel>> watchHabitsUpdatedAfter(DateTime date) {
+    return _habitDataBase.watchHabitsUpdatedAfter(date).map((e) => _mapper.mapIterable(e).toList());
+  }
 }

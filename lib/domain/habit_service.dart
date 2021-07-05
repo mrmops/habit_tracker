@@ -4,9 +4,9 @@ abstract class HabitService{
 
   Stream<List<HabitModel>> getHabits(String filter, bool revertSort);
 
-  void updateHabitsFromServer();
+  Future updateHabitsFromServer();
 
-  void addLocalHabitsToServer();
+  Future addLocalHabitsToServer();
 
   Future<bool> saveHabit(HabitModel habit);
 

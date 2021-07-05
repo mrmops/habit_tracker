@@ -105,4 +105,14 @@ class HabitDataBaseImp extends _$HabitDataBaseImp implements HabitDataBase {
   @override
   Future<int> updateHabit(Habit habit) =>
       into(habits).insert(habit, mode: InsertMode.insertOrReplace);
+
+  @override
+  Future<List<Habit>> getHabitsUpdatedAfter(DateTime date) {
+    return (select(habits)..where((tbl) => tbl.date.isSmallerThanValue(date))).get();
+  }
+
+  @override
+  Stream<List<Habit>> watchHabitsUpdatedAfter(DateTime date) {
+    return (select(habits)..where((tbl) => tbl.date.isSmallerThanValue(date))).watch();
+  }
 }

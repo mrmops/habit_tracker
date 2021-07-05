@@ -30,4 +30,7 @@ abstract class HabitDataBase {
       int count);
 
   Future<int> updateHabit(Habit habit);
+
+  Stream<List<Habit>> watchHabitsUpdatedAfter(DateTime date);
+  Future<List<Habit>> getHabitsUpdatedAfter(DateTime date);
 }

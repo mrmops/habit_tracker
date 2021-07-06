@@ -69,7 +69,7 @@ class HabitItemState extends State<HabitItem> {
                 children: [
                   MaterialButton(
                     color: Color(0xFF6200EE),
-                    child: Text('Сохранить'),
+                    child: Text('Выполнить!'),
                     onPressed: () async {
                       await context
                         .read<HabitsListBloc>()

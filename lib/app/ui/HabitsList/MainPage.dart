@@ -79,9 +79,7 @@ class MainPageState extends State<MainPage> {
     _scaffoldKey.currentState
         ?.showBottomSheet(
           (context) {
-            return BlocBuilder<HabitsListBloc, List<HabitModel>>(
-                builder: (context, state) =>
-                    FilteringOptionsWidget());
+            return FilteringOptionsWidget();
           },
         )
         .closed

@@ -76,7 +76,7 @@ class _RetrofitClient implements RetrofitClient {
   }
 
   @override
-  Future<SuccessDto> doneHabit(dto) async {
+  Future<SuccessDto> doneHabit(id, dto) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
@@ -84,7 +84,7 @@ class _RetrofitClient implements RetrofitClient {
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<SuccessDto>(
             Options(method: 'POST', headers: <String, dynamic>{}, extra: _extra)
-                .compose(_dio.options, '/habits/{id}/complete',
+                .compose(_dio.options, '/habits/$id/complete',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = SuccessDto.fromJson(_result.data!);

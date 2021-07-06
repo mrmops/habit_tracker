@@ -10,9 +10,9 @@ abstract class HabitService{
 
   Future<bool> saveHabit(HabitModel habit);
 
-  Future<bool> doneHabit(String habitServerId);
+  Future<bool> doneHabit(HabitModel habit);
 
-  Future<int> remainingReps(String habitServerId);
+  Future<int> remainingReps(HabitModel habit);
 
   Stream<HabitModel> watchHabitModelByServerId(String id);
 

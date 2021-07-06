@@ -11,5 +11,5 @@ abstract class HabitNetworkRepository{
   
   Future<bool> patchHabit(String id, HabitModel habit);
   
-  Future<bool> doneHabit(DateTime dto);
+  Future<bool> doneHabit(String habitId, DateTime dto);
 }

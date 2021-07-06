@@ -24,5 +24,5 @@ abstract class RetrofitClient {
   Future<SuccessDto> patchHabit(@Path() String id, @Body() HabitDto dto);
 
   @POST('/habits/{id}/complete')
-  Future<SuccessDto> doneHabit(@Body() DateTimeDto dto);
+  Future<SuccessDto> doneHabit(@Path() String id, @Body() DateTimeDto dto);
 }

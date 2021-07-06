@@ -43,6 +43,10 @@ class HabitsListBloc extends Cubit<List<HabitModel>> {
     _filteringOptions.isRevertSort = revertSort;
     _filteringOptionsStream.sink.add(_filteringOptions);
   }
+
+  Future doneHabit(HabitModel model) async {
+    await _habitService.doneHabit(model);
+  }
 }
 
 class FilteringOptions {

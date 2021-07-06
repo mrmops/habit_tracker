@@ -6,7 +6,6 @@ import 'package:habit_tracker/app/ui/HabitsDetails/HabitAddOrEditPage.dart';
 import 'package:habit_tracker/domain/Models/habit.dart';
 
 class HabitsTypedListWidget extends StatefulWidget {
-
   final HabitType _habitType;
 
   HabitsTypedListWidget(this._habitType);
@@ -20,17 +19,18 @@ class _HabitsTypedListWidgetState extends State<HabitsTypedListWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<HabitsListBloc, List<HabitModel>>(
         builder: (context, state) {
-          var habits = state.where((element) => element.type == widget._habitType)
-              .map((e) => HabitItemStateInfo(e, true))
-              .toList();
+      var habits = state
+          .where((element) => element.type == widget._habitType)
+          .map((e) => HabitItemStateInfo(e, true))
+          .toList();
 
-          return ListView.builder(
-            itemBuilder: (context, position) {
-              return HabitItem(habits[position]);
-            },
-            itemCount: habits.length,
-          );
-        });
+      return ListView.builder(
+        itemBuilder: (context, position) {
+          return HabitItem(habits[position]);
+        },
+        itemCount: habits.length,
+      );
+    });
   }
 }
 
@@ -54,20 +54,29 @@ class HabitItemState extends State<HabitItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () =>
-          Navigator.pushNamed(context, HabitAddOrEditPage.routingKey,
-              arguments: widget.info.habitModel.id),
+      onTap: () => Navigator.pushNamed(context, HabitAddOrEditPage.routingKey,
+          arguments: widget.info.habitModel.id),
       child: Card(
         child: Column(
           children: [
             ListTile(
               title: Text(widget.info.habitModel.name),
-              subtitle: Text(widget.info.habitModel.dateOfUpdate.toIso8601String()),
+              subtitle:
+                  Text(widget.info.habitModel.dateOfUpdate.toIso8601String()),
               trailing: Wrap(
                 direction: Axis.horizontal,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  Text(widget.info.habitModel.priority.localizedString),
+                  MaterialButton(
+                    color: Color(0xFF6200EE),
+                    child: Text('Сохранить'),
+                    onPressed: () async {
+                      await context
+                        .read<HabitsListBloc>()
+                        .doneHabit(widget.info.habitModel);
+
+                    },
+                  ),
                   IconButton(
                     icon: widget.info.hidden
                         ? const Icon(Icons.arrow_drop_down_sharp)
@@ -81,14 +90,14 @@ class HabitItemState extends State<HabitItem> {
                 ],
               ),
             ),
-            if (!widget.info.hidden) buildHiddenProperties(widget.info.habitModel),
+            if (!widget.info.hidden) buildHiddenProperties(),
           ],
         ),
       ),
     );
   }
 
-  Widget buildHiddenProperties(HabitModel habitModel) {
+  Widget buildHiddenProperties() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -98,11 +107,12 @@ class HabitItemState extends State<HabitItem> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text('Number of completed: ${habitModel.count}'),
-              Text('Frequency: ${habitModel.frequency}')
+              Text('Number of completed: ${widget.info.habitModel.count}'),
+              Text('Frequency: ${widget.info.habitModel.frequency}'),
+              Text(widget.info.habitModel.priority.localizedString),
             ],
           ),
-          Text(habitModel.description ?? ''),
+          Text(widget.info.habitModel.description ?? ''),
         ],
       ),
     );

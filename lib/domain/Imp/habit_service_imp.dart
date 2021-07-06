@@ -15,7 +15,7 @@ class HabitServiceImp extends HabitService {
     trySyncWithServer();
   }
 
-  Future trySyncWithServer() async{
+  Future trySyncWithServer() async {
     await updateHabitsFromServer();
     await addLocalHabitsToServer();
   }
@@ -27,7 +27,7 @@ class HabitServiceImp extends HabitService {
     var habits = await _networkRepository.getHabits();
     var millisecondsSinceEpoch2 = date.millisecondsSinceEpoch;
     for (var habit in habits.where((element) =>
-    element.dateOfUpdate.millisecondsSinceEpoch >
+        element.dateOfUpdate.millisecondsSinceEpoch >
         millisecondsSinceEpoch2)) {
       await _databaseRepository.addOrUpdateHabitModel(habit);
     }
@@ -39,7 +39,7 @@ class HabitServiceImp extends HabitService {
     var localHabits = await _databaseRepository.getHabitsUpdatedAfter(date);
 
     for (var habit in localHabits) {
-        await saveHabit(habit);
+      await saveHabit(habit);
     }
 
     var sharedPreferences = (await SharedPreferences.getInstance());
@@ -48,13 +48,22 @@ class HabitServiceImp extends HabitService {
   }
 
   @override
-  Future<bool> doneHabit(String habitServerId) async {
-    var localHabit = await requiredHabitById(habitServerId);
-
+  Future<bool> doneHabit(HabitModel localHabit) async {
     var dateTime = DateTime.now();
     localHabit.doneDates.add(dateTime);
-    await _databaseRepository.addOrUpdateHabitModel(localHabit);
-    return await _networkRepository.doneHabit(dateTime);
+
+    try {
+      if (localHabit.serverId == null) {
+        var id = await _networkRepository.addHabit(localHabit);
+        localHabit.serverId = id;
+        return true;
+      }
+      return await _networkRepository.doneHabit(localHabit.serverId!, dateTime);
+    } catch (e) {
+      return false;
+    } finally {
+      await _databaseRepository.addOrUpdateHabitModel(localHabit);
+    }
   }
 
   @override
@@ -62,13 +71,14 @@ class HabitServiceImp extends HabitService {
     return _databaseRepository.watchHabitModelsOrderByDate(revertSort).map(
         (event) => filter == null
             ? event
-            : event.where((element) => element.name.contains(filter)).toList());
+            : event
+                .where((element) =>
+                    element.name.toLowerCase().contains(filter.toLowerCase()))
+                .toList());
   }
 
   @override
-  Future<int> remainingReps(String habitServerId) async {
-    var habit = await requiredHabitById(habitServerId);
-
+  Future<int> remainingReps(HabitModel habit) async {
     var allowableTimeDifference = dayMilis * habit.frequency;
     var currentDateMilis = DateTime.now().millisecondsSinceEpoch;
     return habit.count -

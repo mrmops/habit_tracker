@@ -37,6 +37,7 @@ dependencies:
   provider: ^5.0.0
   flutter_bloc: ^7.0.1
   stream_transform: ^2.0.0
+  toast: ^0.1.5
 
 dev_dependencies:
   flutter_test:

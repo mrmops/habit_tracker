@@ -49,7 +49,7 @@ class HabitDataBaseImp extends _$HabitDataBaseImp implements HabitDataBase {
 
   @override
   Future<Habit?> getHabitByServerId(String? serverId) => (select(habits)
-        ..where((tbl) => tbl.serverId.isNull())
+        ..where((tbl) => tbl.serverId.isNotNull())
         ..where((tbl) => tbl.serverId.equals(serverId)))
       .getSingleOrNull();
 
@@ -94,6 +94,7 @@ class HabitDataBaseImp extends _$HabitDataBaseImp implements HabitDataBase {
           HabitsCompanion.insert(
               serverId: Value(serverId),
               name: name,
+              description: Value(description),
               date: date,
               dates: dates,
               habitType: habitType,

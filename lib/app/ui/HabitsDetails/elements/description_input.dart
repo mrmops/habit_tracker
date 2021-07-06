@@ -16,7 +16,9 @@ class _DescriptionFieldWidgetState extends State<DescriptionFieldWidget> {
     return BlocListener<HabitDetailsBloc, HabitModelEditState>(
       listenWhen: (oldValue, newValue) =>
       oldValue.description != newValue.description,
-      listener: (context, state) => textEditingController.text = state.description ?? currentInput ?? '',
+      listener: (context, state) {
+        textEditingController.text = state.description ?? currentInput ?? '';
+      },
       child: TextFormField(
         controller: textEditingController,
         keyboardType: TextInputType.multiline,

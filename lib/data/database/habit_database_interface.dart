@@ -11,7 +11,7 @@ abstract class HabitDataBase {
   Future<Habit?> getHabitByServerId(String? id);
 
   Stream<Habit> watchHabitById(int id);
-  Future<Habit> getHabitById(int id);
+  Future<Habit?> getHabitById(int id);
 
   Stream<List<Habit>> watchHabitsOrderByDate(
       {OrderingMode orderDirection = OrderingMode.asc});

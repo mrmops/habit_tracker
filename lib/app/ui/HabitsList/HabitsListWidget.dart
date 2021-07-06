@@ -1,59 +1,94 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habit_tracker/app/blocs/habits_list_bloc.dart';
+import 'package:habit_tracker/app/extensions/habit_priority_extensions.dart';
+import 'package:habit_tracker/app/ui/HabitsDetails/HabitAddOrEditPage.dart';
+import 'package:habit_tracker/domain/Models/habit.dart';
 
-class HabitsListWidget extends StatelessWidget {
+class HabitsTypedListWidget extends StatefulWidget {
+
+  final HabitType _habitType;
+
+  HabitsTypedListWidget(this._habitType);
+
+  @override
+  _HabitsTypedListWidgetState createState() => _HabitsTypedListWidgetState();
+}
+
+class _HabitsTypedListWidgetState extends State<HabitsTypedListWidget> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (context, position) {
-        return HabitItem();
-      },
-      itemCount: 20,
-    );
+    return BlocBuilder<HabitsListBloc, List<HabitModel>>(
+        builder: (context, state) {
+          var habits = state.where((element) => element.type == widget._habitType)
+              .map((e) => HabitItemStateInfo(e, true))
+              .toList();
+
+          return ListView.builder(
+            itemBuilder: (context, position) {
+              return HabitItem(habits[position]);
+            },
+            itemCount: habits.length,
+          );
+        });
   }
 }
 
+class HabitItemStateInfo {
+  HabitModel habitModel;
+  bool hidden;
+
+  HabitItemStateInfo(this.habitModel, this.hidden);
+}
+
 class HabitItem extends StatefulWidget {
+  final HabitItemStateInfo info;
+
+  HabitItem(this.info);
+
   @override
   State<HabitItem> createState() => HabitItemState();
 }
 
 class HabitItemState extends State<HabitItem> {
-  bool _hiddenState = true;
-
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          ListTile(
-            title: Text('Name'),
-            subtitle: Text('30.02.2077 +5'),
-            trailing: Wrap(
-              direction: Axis.horizontal,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                Text('Normal'),
-                IconButton(
-                  icon: _hiddenState
-                      ? const Icon(Icons.arrow_drop_down_sharp)
-                      : const Icon(Icons.arrow_drop_up_sharp),
-                  onPressed: () {
-                    setState(() {
-                      _hiddenState = !_hiddenState;
-                    });
-                  },
-                ),
-              ],
+    return GestureDetector(
+      onTap: () =>
+          Navigator.pushNamed(context, HabitAddOrEditPage.routingKey,
+              arguments: widget.info.habitModel.id),
+      child: Card(
+        child: Column(
+          children: [
+            ListTile(
+              title: Text(widget.info.habitModel.name),
+              subtitle: Text(widget.info.habitModel.dateOfUpdate.toIso8601String()),
+              trailing: Wrap(
+                direction: Axis.horizontal,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Text(widget.info.habitModel.priority.localizedString),
+                  IconButton(
+                    icon: widget.info.hidden
+                        ? const Icon(Icons.arrow_drop_down_sharp)
+                        : const Icon(Icons.arrow_drop_up_sharp),
+                    onPressed: () {
+                      setState(() {
+                        widget.info.hidden = !widget.info.hidden;
+                      });
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-          if (!_hiddenState) buildHiddenProperties(),
-        ],
+            if (!widget.info.hidden) buildHiddenProperties(widget.info.habitModel),
+          ],
+        ),
       ),
     );
   }
 
-
-  Widget buildHiddenProperties() {
+  Widget buildHiddenProperties(HabitModel habitModel) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -62,77 +97,14 @@ class HabitItemState extends State<HabitItem> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [Text('Number of completed'), Text('still need')],
+            children: [
+              Text('Number of completed: ${habitModel.count}'),
+              Text('Frequency: ${habitModel.frequency}')
+            ],
           ),
-          Text('Description')
+          Text(habitModel.description ?? ''),
         ],
       ),
     );
   }
-
-  //TODO delete old version
-  // @override
-  // Widget build(BuildContext context) {
-  //   return IntrinsicHeight(
-  //     child: Padding(
-  //       padding: EdgeInsets.symmetric(horizontal: 16),
-  //       child: Column(
-  //         children: [
-  //           Container(
-  //             height: 64,
-  //             child: Padding(
-  //               padding: EdgeInsets.symmetric(vertical: 8),
-  //               child: Row(
-  //                 children: [
-  //                   Expanded(
-  //                     child: Column(
-  //                       crossAxisAlignment: CrossAxisAlignment.start,
-  //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                       children: <Widget>[
-  //                         Text(
-  //                           'Name',
-  //                           style: TextStyle(fontSize: 18),
-  //                         ),
-  //                         Text(
-  //                           '30.02.2077 +5',
-  //                           style: TextStyle(fontSize: 14),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                   Text('Normal'),
-  //                   IconButton(
-  //                     icon: _hiddenState
-  //                         ? const Icon(Icons.arrow_drop_down_sharp)
-  //                         : const Icon(Icons.arrow_drop_up_sharp),
-  //                     onPressed: () {
-  //                       setState(() {
-  //                         _hiddenState = !_hiddenState;
-  //                       });
-  //                     },
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //           if (!_hiddenState) buildHiddenProperties(),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  //}
-  //
-  // Widget buildHiddenProperties() {
-  //   return Column(
-  //     mainAxisAlignment: MainAxisAlignment.start,
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //         children: [Text('Number of completed'), Text('still need')],
-  //       ),
-  //       Text('Description')
-  //     ],
-  //   );
-  // }
 }

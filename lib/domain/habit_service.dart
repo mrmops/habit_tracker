@@ -13,4 +13,12 @@ abstract class HabitService{
   Future<bool> doneHabit(String habitServerId);
 
   Future<int> remainingReps(String habitServerId);
+
+  Stream<HabitModel> watchHabitModelByServerId(String id);
+
+  Future<HabitModel?> getHabitModelByServerId(String id);
+
+  Stream<HabitModel> watchHabitModelById(int id);
+
+  Future<HabitModel?> getHabitModelById(int id);
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habit_tracker/app/UI/HabitsDetails/HabitAddOrEditPage.dart';
+import 'package:habit_tracker/app/blocs/habits_list_bloc.dart';
+import 'package:habit_tracker/domain/Models/habit.dart';
 import 'FilteringOptionsWidget.dart';
 import 'HabitsListWidget.dart';
 
@@ -48,12 +51,8 @@ class MainPageState extends State<MainPage> {
           ),
           body: TabBarView(
             children: [
-              BlocBuilder<HabitsListBloc, List<HabitModel>>(
-                  builder: (context, state) =>
-                      HabitsListWidget(context.read<HabitsListBloc>())),
-              BlocBuilder<HabitsListBloc, List<HabitModel>>(
-                  builder: (context, state) =>
-                      HabitsListWidget(context.read<HabitsListBloc>())),
+              HabitsTypedListWidget(HabitType.BAD),
+              HabitsTypedListWidget(HabitType.GOOD),
             ],
           ),
           floatingActionButtonLocation:
@@ -80,7 +79,9 @@ class MainPageState extends State<MainPage> {
     _scaffoldKey.currentState
         ?.showBottomSheet(
           (context) {
-            return FilteringOptionsWidget();
+            return BlocBuilder<HabitsListBloc, List<HabitModel>>(
+                builder: (context, state) =>
+                    FilteringOptionsWidget());
           },
         )
         .closed

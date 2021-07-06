@@ -4,6 +4,8 @@ abstract class HabitNetworkRepository{
   Future<List<HabitModel>> getHabits();
   
   Future<String> addHabit(HabitModel dto);
+
+  Future<String> addOrUpdateHabit(HabitModel dto);
   
   Future<bool> deleteHabit(String id);
   

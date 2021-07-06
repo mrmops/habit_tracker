@@ -11,7 +11,27 @@ class HabitServiceImp extends HabitService {
   HabitDatabaseRepository _databaseRepository;
   HabitNetworkRepository _networkRepository;
 
-  HabitServiceImp(this._databaseRepository, this._networkRepository);
+  HabitServiceImp(this._databaseRepository, this._networkRepository) {
+    trySyncWithServer();
+  }
+
+  Future trySyncWithServer() async{
+    await updateHabitsFromServer();
+    await addLocalHabitsToServer();
+  }
+
+  @override
+  Future<void> updateHabitsFromServer() async {
+    var date = await findLastUpdateDate();
+
+    var habits = await _networkRepository.getHabits();
+    var millisecondsSinceEpoch2 = date.millisecondsSinceEpoch;
+    for (var habit in habits.where((element) =>
+    element.dateOfUpdate.millisecondsSinceEpoch >
+        millisecondsSinceEpoch2)) {
+      await _databaseRepository.addOrUpdateHabitModel(habit);
+    }
+  }
 
   @override
   Future addLocalHabitsToServer() async {
@@ -19,14 +39,7 @@ class HabitServiceImp extends HabitService {
     var localHabits = await _databaseRepository.getHabitsUpdatedAfter(date);
 
     for (var habit in localHabits) {
-      var serverId = habit.serverId;
-      if (serverId != null)
-        await _networkRepository.patchHabit(serverId, habit);
-      else {
-        var serverId = await _networkRepository.addHabit(habit);
-        habit.serverId = serverId;
-        await _databaseRepository.addOrUpdateHabitModel(habit);
-      }
+        await saveHabit(habit);
     }
 
     var sharedPreferences = (await SharedPreferences.getInstance());
@@ -69,9 +82,9 @@ class HabitServiceImp extends HabitService {
   @override
   Future<bool> saveHabit(HabitModel habit) async {
     try {
-      var serverId = await _networkRepository.addHabit(habit);
+      habit.dateOfUpdate = DateTime.now();
+      var serverId = await _networkRepository.addOrUpdateHabit(habit);
       habit.serverId = serverId;
-      await _databaseRepository.addOrUpdateHabitModel(habit);
       return true;
     } catch (e) {
       habit.dateOfUpdate = DateTime.now();
@@ -79,19 +92,6 @@ class HabitServiceImp extends HabitService {
       await _databaseRepository.addOrUpdateHabitModel(habit);
     }
     return false;
-  }
-
-  @override
-  Future<void> updateHabitsFromServer() async {
-    var date = await findLastUpdateDate();
-
-    var habits = await _networkRepository.getHabits();
-    var millisecondsSinceEpoch2 = date.millisecondsSinceEpoch;
-    for (var habit in habits.where((element) =>
-        element.dateOfUpdate.millisecondsSinceEpoch >
-        millisecondsSinceEpoch2)) {
-      await _databaseRepository.addOrUpdateHabitModel(habit);
-    }
   }
 
   Future<DateTime> findLastUpdateDate() async {
@@ -107,5 +107,25 @@ class HabitServiceImp extends HabitService {
         ? throw new ArgumentError(
             'Привычка с таким serverId $habitServerId не найдена локально!')
         : localHabit;
+  }
+
+  @override
+  Future<HabitModel?> getHabitModelById(int id) {
+    return _databaseRepository.getHabitModelById(id);
+  }
+
+  @override
+  Future<HabitModel?> getHabitModelByServerId(String id) {
+    return _databaseRepository.getHabitModelByServerId(id);
+  }
+
+  @override
+  Stream<HabitModel> watchHabitModelById(int id) {
+    return _databaseRepository.watchHabitModelById(id);
+  }
+
+  @override
+  Stream<HabitModel> watchHabitModelByServerId(String id) {
+    return _databaseRepository.watchHabitModelByServerId(id);
   }
 }

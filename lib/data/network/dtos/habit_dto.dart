@@ -1,19 +1,19 @@
 import 'package:habit_tracker/domain/Models/habit.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:habit_tracker/data/network/Dtos/date_time_dto.dart';
 
 part 'habit_dto.g.dart';
 
 @JsonSerializable()
 class HabitDto {
+  @JsonKey(name: 'uid', includeIfNull: false)
   String? id;
   String? title = '';
   int? color = 0;
   String? description;
   @JsonKey(
       name: 'date',
-      toJson: DateTimeDto.dateToJson,
-      fromJson: DateTimeDto.dateFromJson)
+      toJson: tryDateToJson,
+      fromJson: tryDateFromJson)
   DateTime? dateOfUpdate = DateTime.now();
   @JsonKey(toJson: datesToDto, fromJson: datesFromDto)
   List<DateTime>? doneDates = List.empty();
@@ -38,7 +38,10 @@ class HabitDto {
   factory HabitDto.fromJson(Map<String, dynamic> json) =>
       _$HabitDtoFromJson(json);
 
-  Map<String, dynamic> toJson() => _$HabitDtoToJson(this);
+  Map<String, dynamic> toJson() {
+    var $habitDtoToJson = _$HabitDtoToJson(this);
+    return $habitDtoToJson;
+  }
 
   static HabitType? typeFromJson(int? intHabitType) =>
       intHabitType != null ? HabitType.values[intHabitType] : null;
@@ -65,5 +68,13 @@ class HabitDto {
 
   static int dateToJson(DateTime dateTime) {
     return dateTime.millisecondsSinceEpoch;
+  }
+
+  static DateTime? tryDateFromJson(int? json) {
+    return json != null ? DateTime.fromMillisecondsSinceEpoch(json) : null;
+  }
+
+  static int? tryDateToJson(DateTime? dateTime) {
+    return dateTime?.millisecondsSinceEpoch;
   }
 }

@@ -49,17 +49,17 @@ class HabitDataBaseImp extends _$HabitDataBaseImp implements HabitDataBase {
 
   @override
   Future<Habit?> getHabitByServerId(String? serverId) => (select(habits)
-        ..where((tbl) => tbl.serverId.isNotNull())
+        ..where((tbl) => tbl.serverId.isNull())
         ..where((tbl) => tbl.serverId.equals(serverId)))
-      .getSingle();
+      .getSingleOrNull();
 
   @override
   Stream<Habit> watchHabitById(int id) =>
       (select(habits)..where((tbl) => tbl.id.equals(id))).watchSingle();
 
   @override
-  Future<Habit> getHabitById(int id) =>
-      (select(habits)..where((tbl) => tbl.id.equals(id))).getSingle();
+  Future<Habit?> getHabitById(int id) =>
+      (select(habits)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
 
   @override
   Stream<List<Habit>> watchHabitsOrderByDate(
@@ -108,7 +108,7 @@ class HabitDataBaseImp extends _$HabitDataBaseImp implements HabitDataBase {
 
   @override
   Future<List<Habit>> getHabitsUpdatedAfter(DateTime date) {
-    return (select(habits)..where((tbl) => tbl.date.isSmallerThanValue(date))).get();
+    return (select(habits)..where((tbl) => tbl.date.isBiggerThanValue(date))).get();
   }
 
   @override

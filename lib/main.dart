@@ -24,50 +24,50 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Habit Tracker',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider<BaseMapper<HabitModel, Habit>>(
-              create: (context) => HabitDatabaseMapper()),
-
-          RepositoryProvider<HabitDataBase>(
-              create: (context) => HabitDataBaseImp()),
-
-          RepositoryProvider<HabitDatabaseRepository>(
-              create: (context) =>
-                  HabitDatabaseWrapperImp(context.read(), context.read())),
-
-          RepositoryProvider<RetrofitClient>(
-              create: (context) =>
-                  RetrofitConfigurationHelper.retrofitInstance),
-
-          RepositoryProvider<BaseMapper<HabitModel, HabitDto>>(
-              create: (context) => HabitDtoMapper()),
-
-          RepositoryProvider<HabitNetworkRepository>(
-              create: (context) =>
-                  NetworkRepositoryImp(context.read(), context.read())),
-
-
-          RepositoryProvider<HabitService>(
-              create: (context) => HabitServiceImp(
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<BaseMapper<HabitModel, Habit>>(
+            create: (context) => HabitDatabaseMapper()),
+        RepositoryProvider<HabitDataBase>(
+            create: (context) => HabitDataBaseImp()),
+        RepositoryProvider<HabitDatabaseRepository>(
+            create: (context) =>
+                HabitDatabaseWrapperImp(context.read(), context.read())),
+        RepositoryProvider<RetrofitClient>(
+            create: (context) => RetrofitConfigurationHelper.retrofitInstance),
+        RepositoryProvider<BaseMapper<HabitModel, HabitDto>>(
+            create: (context) => HabitDtoMapper()),
+        RepositoryProvider<HabitNetworkRepository>(
+            create: (context) =>
+                NetworkRepositoryImp(context.read(), context.read())),
+        RepositoryProvider<HabitService>(
+            create: (context) => HabitServiceImp(
                   context.read<HabitDatabaseRepository>(),
                   context.read<HabitNetworkRepository>(),
-              )),
-        ],
-        child: MainPage(),
+                )),
+      ],
+      child: MaterialApp(
+        title: 'Habit Tracker',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MainPage(),
+        onGenerateRoute: (setting) {
+          switch (setting.name) {
+            case MainPage.routeKey:
+              return MaterialPageRoute(builder: (_) => MainPage());
+            case HabitAddOrEditPage.routingKey:
+              return MaterialPageRoute(
+                  builder: (_) =>
+                      HabitAddOrEditPage(habitId: setting.arguments as int?));
+            default:
+              return MaterialPageRoute(
+                  builder: (_) => Text('Неизвестная траница'));
+          }
+        },
       ),
-      routes: {
-        MainPage.routeKey: (buildContext) => MainPage(),
-        HabitAddOrEditPage.routingKey: (buildContext) => HabitAddOrEditPage(),
-      },
     );
   }
 }

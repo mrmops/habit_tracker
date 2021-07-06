@@ -45,9 +45,9 @@ class HabitDatabaseWrapperImp extends HabitDatabaseRepository {
   }
 
   @override
-  Future<HabitModel> getHabitModelById(int id) async {
+  Future<HabitModel?> getHabitModelById(int id) async {
     var habit = await _habitDataBase.getHabitById(id);
-    return _mapper.map(habit);
+    return _mapper.tryMap(habit);
   }
 
   @override
@@ -89,7 +89,7 @@ class HabitDatabaseWrapperImp extends HabitDatabaseRepository {
         count);
 
     var habit = await _habitDataBase.getHabitById(habitId);
-    return _mapper.map(habit);
+    return _mapper.map(habit!);
   }
 
   @override

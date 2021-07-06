@@ -34,4 +34,14 @@ class NetworkRepositoryImp extends HabitNetworkRepository {
   @override
   Future<bool> patchHabit(String id, HabitModel habit) async =>
       (await _retrofitClient.patchHabit(id, _mapper.revertMap(habit))).success;
+
+  @override
+  Future<String> addOrUpdateHabit(HabitModel dto) async {
+    if(dto.serverId != null) {
+      await patchHabit(dto.serverId!, dto);
+      return dto.serverId!;
+    } else {
+      return await addHabit(dto);
+    }
+  }
 }

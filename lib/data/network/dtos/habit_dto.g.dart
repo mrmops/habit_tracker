@@ -8,7 +8,7 @@ part of 'habit_dto.dart';
 
 HabitDto _$HabitDtoFromJson(Map<String, dynamic> json) {
   return HabitDto(
-    id: json['id'] as String?,
+    id: json['uid'] as String?,
     title: json['title'] as String?,
     description: json['description'] as String?,
     type: HabitDto.typeFromJson(json['type'] as int?),
@@ -16,20 +16,28 @@ HabitDto _$HabitDtoFromJson(Map<String, dynamic> json) {
     frequency: json['frequency'] as int?,
     count: json['count'] as int?,
     doneDates: HabitDto.datesFromDto(json['doneDates'] as List<int>?),
-    dateOfUpdate:
-        json['date'] == null ? null : DateTime.parse(json['date'] as String),
+    dateOfUpdate: HabitDto.tryDateFromJson(json['date'] as int?),
   )..color = json['color'] as int?;
 }
 
-Map<String, dynamic> _$HabitDtoToJson(HabitDto instance) => <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
-      'color': instance.color,
-      'description': instance.description,
-      'date': instance.dateOfUpdate?.toIso8601String(),
-      'doneDates': HabitDto.datesToDto(instance.doneDates),
-      'type': HabitDto.typeToJson(instance.type),
-      'priority': HabitDto.priorityToJson(instance.priority),
-      'frequency': instance.frequency,
-      'count': instance.count,
-    };
+Map<String, dynamic> _$HabitDtoToJson(HabitDto instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('uid', instance.id);
+  val['title'] = instance.title;
+  val['color'] = instance.color;
+  val['description'] = instance.description;
+  val['date'] = HabitDto.tryDateToJson(instance.dateOfUpdate);
+  val['doneDates'] = HabitDto.datesToDto(instance.doneDates);
+  val['type'] = HabitDto.typeToJson(instance.type);
+  val['priority'] = HabitDto.priorityToJson(instance.priority);
+  val['frequency'] = instance.frequency;
+  val['count'] = instance.count;
+  return val;
+}

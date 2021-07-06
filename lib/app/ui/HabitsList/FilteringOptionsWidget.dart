@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habit_tracker/app/blocs/habits_list_bloc.dart';
 
 class FilteringOptionsWidget extends StatelessWidget {
   @override
@@ -32,13 +34,10 @@ class FilteringOptionsWidget extends StatelessWidget {
                   children: [
                     Text('Фильтрация по названию'),
                     Expanded(
-                        child: Container(
-                      child: TextField(
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Enter a search term'),
+                      child: Container(
+                        child: FilterInput(),
                       ),
-                    )),
+                    ),
                   ],
                 ),
               ],
@@ -46,6 +45,24 @@ class FilteringOptionsWidget extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class FilterInput extends StatefulWidget {
+  @override
+  _FilterInputState createState() => _FilterInputState();
+}
+
+class _FilterInputState extends State<FilterInput> {
+  @override
+  Widget build(BuildContext context) {
+    var bloc = BlocProvider.of<HabitsListBloc>(context, listen: false);
+    return TextField(
+      controller: TextEditingController(text: bloc.currentFilter),
+      onChanged: (text) => bloc.changeFilter(text),
+      decoration:
+          InputDecoration(border: OutlineInputBorder(), hintText: 'Фильтр'),
     );
   }
 }
@@ -58,17 +75,19 @@ class ChangeSortDirectionButton extends StatefulWidget {
 }
 
 class CortButtonState extends State<ChangeSortDirectionButton> {
-  bool invertSortDirection = false;
+  bool revertSortDirection = false;
 
   @override
   Widget build(BuildContext context) {
+    var bloc = BlocProvider.of<HabitsListBloc>(context, listen: false);
     return IconButton(
-      icon: invertSortDirection
+      icon: revertSortDirection
           ? const Icon(Icons.arrow_upward_outlined)
           : const Icon(Icons.arrow_downward_outlined),
       onPressed: () {
+        bloc.changeSort(revertSortDirection);
         setState(() {
-          invertSortDirection = !invertSortDirection;
+          revertSortDirection = !revertSortDirection;
         });
       },
     );

@@ -17,7 +17,7 @@ abstract class HabitDatabaseRepository{
 
   Stream<HabitModel> watchHabitModelById(int id);
 
-  Future<HabitModel> getHabitModelById(int id);
+  Future<HabitModel?> getHabitModelById(int id);
 
   Stream<List<HabitModel>> watchHabitModelsOrderByDate(bool revert);
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:habit_tracker/app/ui/HabitsDetails/HabitAddOrEditPage.dart';
 import 'package:habit_tracker/app/ui/HabitsList/MainPage.dart';
 import 'package:habit_tracker/data/database/Imp/habit_database_imp.dart';
@@ -15,6 +16,7 @@ import 'package:habit_tracker/domain/Imp/habit_service_imp.dart';
 import 'package:habit_tracker/domain/habit_service.dart';
 import 'package:habit_tracker/domain/interfaces/habit_database_repository.dart';
 import 'package:habit_tracker/domain/interfaces/habit_network_repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'domain/Models/habit.dart';
 import 'infostructure/base_mapper.dart';
@@ -54,6 +56,16 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: MainPage(),
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', ''),
+          const Locale('ru', ''),
+        ],
         onGenerateRoute: (setting) {
           switch (setting.name) {
             case MainPage.routeKey:

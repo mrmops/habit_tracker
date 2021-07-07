@@ -4,6 +4,7 @@ import 'package:habit_tracker/app/blocs/habits_list_bloc.dart';
 import 'package:habit_tracker/app/extensions/habit_priority_extensions.dart';
 import 'package:habit_tracker/app/ui/HabitsDetails/HabitAddOrEditPage.dart';
 import 'package:habit_tracker/domain/Models/habit.dart';
+import 'package:intl/intl.dart';
 
 class HabitsTypedListWidget extends StatefulWidget {
   final HabitType _habitType;
@@ -51,6 +52,8 @@ class HabitItem extends StatefulWidget {
 }
 
 class HabitItemState extends State<HabitItem> {
+  static DateFormat _dateFormat = DateFormat('HH:mm dd-MM-yyyy', 'ru');
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -62,7 +65,7 @@ class HabitItemState extends State<HabitItem> {
             ListTile(
               title: Text(widget.info.habitModel.name),
               subtitle:
-                  Text(widget.info.habitModel.dateOfUpdate.toIso8601String()),
+                  Text(_dateFormat.format(widget.info.habitModel.dateOfUpdate)),
               trailing: Wrap(
                 direction: Axis.horizontal,
                 crossAxisAlignment: WrapCrossAlignment.center,

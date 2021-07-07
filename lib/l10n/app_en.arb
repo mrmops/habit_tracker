@@ -1,0 +1,15 @@
+{
+    "helloWorld": "Hello World!",
+    "@helloWorld": {
+      "description": "A message with a formatted int parameter"
+    },
+    "repsLeft": "{count,plural, other{{count} reps left}}",
+    "@repsLeft": {
+      "description": "Reps left message",
+      "placeholders": {
+        "count": {
+
+        }
+      }
+    }
+}

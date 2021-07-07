@@ -1,4 +1,7 @@
 {
     "helloWorld": "Привет мир!",
-    "repsLeft": "{count,plural, few{Вам осталось выполнить {count} раза} other{Вам осталось выполнить {count} раз}}"
+    "goodRepsLeft": "{count,plural, few{Стоит выполнить еще {count} раза} other{Стоит выполнить еще {count} раз}}",
+    "badRepsLeft": "{count,plural, few{Можете выполнить еще {count} раза} other{Можете выполнить еще {count} раз}}",
+    "stopDoingItBad" :"Хватит это делать!",
+    "stopDoingItGood" :"You are breathtaking!"
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:habit_tracker/app/blocs/habits_list_bloc.dart';
 import 'package:habit_tracker/app/extensions/habit_priority_extensions.dart';
 import 'package:habit_tracker/app/ui/HabitsDetails/HabitAddOrEditPage.dart';
 import 'package:habit_tracker/domain/Models/habit.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 class HabitsTypedListWidget extends StatefulWidget {
@@ -73,12 +75,7 @@ class HabitItemState extends State<HabitItem> {
                   MaterialButton(
                     color: Color(0xFF6200EE),
                     child: Text('Выполнить!'),
-                    onPressed: () async {
-                      await context
-                        .read<HabitsListBloc>()
-                        .doneHabit(widget.info.habitModel);
-
-                    },
+                    onPressed: () => doneHabit(context),
                   ),
                   IconButton(
                     icon: widget.info.hidden
@@ -119,5 +116,31 @@ class HabitItemState extends State<HabitItem> {
         ],
       ),
     );
+  }
+
+  doneHabit(BuildContext context) async {
+    var habitService = context.read<HabitsListBloc>();
+    await habitService.doneHabit(widget.info.habitModel);
+    var repsLeft = await habitService.repsLeft(widget.info.habitModel);
+    String msg = '';
+    var localizations = AppLocalizations.of(context)!;
+    if (widget.info.habitModel.type == HabitType.GOOD) {
+      if (repsLeft > 0) {
+        msg = localizations.goodRepsLeft(repsLeft);
+      } else {
+        msg = localizations.stopDoingItGood;
+      }
+    } else {
+      if (repsLeft > 0) {
+        msg = localizations.badRepsLeft(repsLeft);
+      } else {
+        msg = localizations.stopDoingItBad;
+      }
+    }
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 3);
   }
 }

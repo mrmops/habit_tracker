@@ -47,6 +47,10 @@ class HabitsListBloc extends Cubit<List<HabitModel>> {
   Future doneHabit(HabitModel model) async {
     await _habitService.doneHabit(model);
   }
+
+  Future<int> repsLeft(HabitModel model) async {
+    return await _habitService.repsLeft(model);
+  }
 }
 
 class FilteringOptions {

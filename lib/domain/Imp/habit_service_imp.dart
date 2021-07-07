@@ -78,7 +78,7 @@ class HabitServiceImp extends HabitService {
   }
 
   @override
-  Future<int> remainingReps(HabitModel habit) async {
+  Future<int> repsLeft(HabitModel habit) async {
     var allowableTimeDifference = dayMilis * habit.frequency;
     var currentDateMilis = DateTime.now().millisecondsSinceEpoch;
     return habit.count -

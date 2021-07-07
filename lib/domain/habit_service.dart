@@ -12,7 +12,7 @@ abstract class HabitService{
 
   Future<bool> doneHabit(HabitModel habit);
 
-  Future<int> remainingReps(HabitModel habit);
+  Future<int> repsLeft(HabitModel habit);
 
   Stream<HabitModel> watchHabitModelByServerId(String id);
 

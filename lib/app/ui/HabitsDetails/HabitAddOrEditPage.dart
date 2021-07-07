@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habit_tracker/app/blocs/habit_details_bloc.dart';
 import 'package:habit_tracker/app/ui/HabitsDetails/elements/description_input.dart';
+import 'elements/count_field.dart';
+import 'elements/frequency_field.dart';
 import 'elements/name_input.dart';
 import 'elements/priority_input.dart';
 import 'elements/type_input.dart';
@@ -58,32 +60,8 @@ class _HabitAddOrEditPageState extends State<HabitAddOrEditPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextFormField(
-                        keyboardType: TextInputType.number,
-                        maxLines: null,
-                        decoration: InputDecoration(
-                          labelText: 'Количество повторений',
-                          helperText:
-                              'Количество повторений, которое необходимо выполниться за указанный период',
-                          helperMaxLines: 2,
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF6200EE)),
-                          ),
-                        ),
-                      ),
-                      TextFormField(
-                        keyboardType: TextInputType.number,
-                        maxLines: null,
-                        decoration: InputDecoration(
-                          labelText: 'Периодичность',
-                          helperText:
-                              'Количество дней, за которые необходимо сделать указанное количество повторений',
-                          helperMaxLines: 2,
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF6200EE)),
-                          ),
-                        ),
-                      ),
+                      CountTextField(),
+                      FrequencyTextField(),
                     ],
                   ),
                 ),
@@ -100,6 +78,8 @@ class _HabitAddOrEditPageState extends State<HabitAddOrEditPage> {
   }
 }
 
+
+
 class SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -107,8 +87,7 @@ class SubmitButton extends StatelessWidget {
       color: Color(0xFF6200EE),
       child: Text('Сохранить'),
       onPressed: () {
-        if(context.read<HabitDetailsBloc>().submit())
-          Navigator.pop(context);
+        if (context.read<HabitDetailsBloc>().submit()) Navigator.pop(context);
       },
     );
   }

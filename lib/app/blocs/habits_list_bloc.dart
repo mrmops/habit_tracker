@@ -4,7 +4,7 @@ import 'package:habit_tracker/domain/Models/habit.dart';
 import 'package:habit_tracker/domain/habit_service.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-class HabitsListBloc extends Cubit<List<HabitModel>> {
+class HabitsListBloc extends Cubit<HabitListBlocState> {
   HabitService _habitService;
 
   late Stream<List<HabitModel>> habits;
@@ -17,13 +17,13 @@ class HabitsListBloc extends Cubit<List<HabitModel>> {
   StreamController<FilteringOptions> _filteringOptionsStream =
       StreamController();
 
-  HabitsListBloc(this._habitService) : super(List.empty()) {
+  HabitsListBloc(this._habitService) : super(HabitsList(List.empty())) {
     habits = _filteringOptionsStream.stream.switchMap((filteringOptions) {
       return _habitService.getHabits(
           filteringOptions.filter, filteringOptions.isRevertSort);
     });
     habits.listen((data) {
-      emit(data);
+      emit(HabitsList(data));
     });
     _filteringOptionsStream.sink.add(_filteringOptions);
   }
@@ -51,6 +51,14 @@ class HabitsListBloc extends Cubit<List<HabitModel>> {
   Future<int> repsLeft(HabitModel model) async {
     return await _habitService.repsLeft(model);
   }
+}
+
+abstract class HabitListBlocState {}
+
+class HabitsList extends HabitListBlocState{
+  List<HabitModel> _habits;
+  List<HabitModel> get habits => _habits;
+  HabitsList(this._habits);
 }
 
 class FilteringOptions {

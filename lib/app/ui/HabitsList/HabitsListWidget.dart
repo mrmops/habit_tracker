@@ -20,9 +20,11 @@ class HabitsTypedListWidget extends StatefulWidget {
 class _HabitsTypedListWidgetState extends State<HabitsTypedListWidget> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HabitsListBloc, List<HabitModel>>(
+    return BlocBuilder<HabitsListBloc, HabitListBlocState>(
+      buildWhen: (oldValue, newValue) => newValue is HabitsList,
         builder: (context, state) {
-      var habits = state
+      var habits = (state as HabitsList)
+          .habits
           .where((element) => element.type == widget._habitType)
           .map((e) => HabitItemStateInfo(e, true))
           .toList();

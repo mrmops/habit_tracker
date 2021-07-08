@@ -2,7 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habit_tracker/domain/Models/habit.dart';
 import 'package:habit_tracker/domain/habit_service.dart';
 
-class HabitDetailsBloc extends Cubit<HabitModelEditState> {
+import 'habit_details_bloc_states.dart';
+
+class HabitDetailsBloc extends Cubit<HabitModelState> {
   HabitService _habitService;
   HabitModel? _currentHabit;
 
@@ -14,17 +16,26 @@ class HabitDetailsBloc extends Cubit<HabitModelEditState> {
   int count = 1;
 
   HabitDetailsBloc(this._habitService, {int? habitId})
-      : super(HabitModelEditState('', null, HabitType.BAD, HabitPriority.NORMAL, 1, 1)) {
-    if (habitId != null) loadHabit(habitId);
+      : super(HabitModelLoading()) {
+    if (habitId != null) {
+      loadHabit(habitId);
+    } else{
+      emitValue();
+    }
   }
 
   Future loadHabit(int id) async {
     _currentHabit = await _habitService.getHabitModelById(id);
     if (_currentHabit != null) {
       setValues(_currentHabit!);
-      var currentState = createCurrentState();
-      emit(currentState);
     }
+
+    emitValue();
+  }
+
+  void emitValue() {
+    var currentState = createCurrentState();
+    emit(HabitModelLoaded(currentState));
   }
 
   bool submit() {
@@ -59,34 +70,10 @@ class HabitDetailsBloc extends Cubit<HabitModelEditState> {
     count = from.count;
   }
 
-
-
-  HabitModelEditState createCurrentState() {
-    return HabitModelEditState(
+  HabitModelInfo createCurrentState() {
+    return HabitModelInfo(
         name, description, type, priority, frequency, count);
   }
 }
 
-class HabitModelEditState {
-  String _name;
-  String? _description;
-  HabitType _type;
-  HabitPriority _priority;
-  int _frequency;
-  int _count;
 
-  HabitModelEditState(this._name, this._description, this._type, this._priority,
-      this._frequency, this._count);
-
-  String get name => _name;
-
-  String? get description => _description;
-
-  HabitType get type => _type;
-
-  HabitPriority get priority => _priority;
-
-  int get frequency => _frequency;
-
-  int get count => _count;
-}

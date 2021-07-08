@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:habit_tracker/app/blocs/habit_details_bloc.dart';
+import 'package:habit_tracker/app/blocs/habit_details_bloc/habit_details_bloc.dart';
+import 'package:habit_tracker/app/blocs/habit_details_bloc/habit_details_bloc_states.dart';
 import 'package:habit_tracker/app/ui/HabitsDetails/elements/description_input.dart';
 import 'elements/count_field.dart';
 import 'elements/frequency_field.dart';
@@ -37,48 +38,54 @@ class _HabitAddOrEditPageState extends State<HabitAddOrEditPage> {
           title: Text('AddOrEditHabit'),
         ),
         body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                NameInputFieldWidget(),
-                DescriptionFieldWidget(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 24.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(child: HabitTypeRadio()),
-                      HabitPriorityWidget(),
-                    ],
+          child: BlocBuilder<HabitDetailsBloc, HabitModelState>(
+            builder: (context, state) {
+              if(state is HabitModelLoading) {
+                return CircularProgressIndicator();
+              }
+
+              return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  NameInputFieldWidget(),
+                  DescriptionFieldWidget(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: HabitTypeRadio()),
+                        HabitPriorityWidget(),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 24.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CountTextField(),
-                      FrequencyTextField(),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CountTextField(),
+                        FrequencyTextField(),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 24.0),
-                  child: SubmitButton(),
-                ),
-              ],
-            ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: SubmitButton(),
+                  ),
+                ],
+              ),
+            );
+            },
           ),
         ),
       ),
     );
   }
 }
-
-
 
 class SubmitButton extends StatelessWidget {
   @override

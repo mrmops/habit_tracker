@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:habit_tracker/app/blocs/habit_details_bloc.dart';
+import 'package:habit_tracker/app/blocs/habit_details_bloc/habit_details_bloc.dart';
 
 class FrequencyTextField extends StatefulWidget {
   @override
@@ -12,29 +12,23 @@ class _FrequencyTextFieldState extends State<FrequencyTextField> {
 
   @override
   Widget build(BuildContext context) {
-    var textController = TextEditingController(text: '1');
+    var bloc = context.read<HabitDetailsBloc>();
+    var textController = TextEditingController(text: bloc.frequency.toString());
 
-    return BlocListener<HabitDetailsBloc, HabitModelEditState>(
-      listenWhen: (oldValue, newValue) =>
-          oldValue.frequency != newValue.frequency,
-      listener: (context, state) {
-        textController.text = state.frequency.toString();
+    return TextFormField(
+      controller: textController,
+      keyboardType: TextInputType.number,
+      maxLines: null,
+      onChanged: (text) {
+        bloc.frequency = int.parse(text);
       },
-      child: TextFormField(
-        controller: textController,
-        keyboardType: TextInputType.number,
-        maxLines: null,
-        onChanged: (text) {
-          context.read<HabitDetailsBloc>().frequency = int.parse(text);
-        },
-        decoration: InputDecoration(
-          labelText: 'Периодичность',
-          helperText:
-              'Количество дней, за которые необходимо сделать указанное количество повторений',
-          helperMaxLines: 2,
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFF6200EE)),
-          ),
+      decoration: InputDecoration(
+        labelText: 'Периодичность',
+        helperText:
+            'Количество дней, за которые необходимо сделать указанное количество повторений',
+        helperMaxLines: 2,
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFF6200EE)),
         ),
       ),
     );

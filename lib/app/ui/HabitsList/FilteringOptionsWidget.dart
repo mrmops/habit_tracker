@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:habit_tracker/app/blocs/habits_list_bloc.dart';
+import 'package:habit_tracker/app/blocs/habits_list_bloc/habits_list_bloc.dart';
 
 class FilteringOptionsWidget extends StatelessWidget {
   @override

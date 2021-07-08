@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habit_tracker/app/UI/HabitsDetails/HabitAddOrEditPage.dart';
-import 'package:habit_tracker/app/blocs/habits_list_bloc.dart';
+import 'package:habit_tracker/app/blocs/habits_list_bloc/habits_list_bloc.dart';
 import 'package:habit_tracker/domain/Models/habit.dart';
 import 'FilteringOptionsWidget.dart';
 import 'HabitsListWidget.dart';

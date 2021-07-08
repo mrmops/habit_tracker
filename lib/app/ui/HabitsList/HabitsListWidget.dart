@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:habit_tracker/app/blocs/habits_list_bloc.dart';
+import 'package:habit_tracker/app/blocs/habits_list_bloc/habits_list_bloc.dart';
+import 'package:habit_tracker/app/blocs/habits_list_bloc/habits_list_bloc_states.dart';
 import 'package:habit_tracker/app/extensions/habit_priority_extensions.dart';
 import 'package:habit_tracker/app/ui/HabitsDetails/HabitAddOrEditPage.dart';
 import 'package:habit_tracker/domain/Models/habit.dart';
@@ -21,20 +22,22 @@ class _HabitsTypedListWidgetState extends State<HabitsTypedListWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HabitsListBloc, HabitListBlocState>(
-      buildWhen: (oldValue, newValue) => newValue is HabitsList,
         builder: (context, state) {
-      var habits = (state as HabitsList)
-          .habits
-          .where((element) => element.type == widget._habitType)
-          .map((e) => HabitItemStateInfo(e, true))
-          .toList();
+      if (state is HabitsListLoaded) {
+        var habits = state
+            .habits
+            .where((element) => element.type == widget._habitType)
+            .map((e) => HabitItemStateInfo(e, true))
+            .toList();
 
-      return ListView.builder(
-        itemBuilder: (context, position) {
-          return HabitItem(habits[position]);
-        },
-        itemCount: habits.length,
-      );
+        return ListView.builder(
+          itemBuilder: (context, position) {
+            return HabitItem(habits[position]);
+          },
+          itemCount: habits.length,
+        );
+      }
+      return CircularProgressIndicator();
     });
   }
 }

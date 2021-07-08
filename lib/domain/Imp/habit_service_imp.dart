@@ -4,14 +4,14 @@ import 'package:habit_tracker/domain/interfaces/habit_database_repository.dart';
 import 'package:habit_tracker/domain/interfaces/habit_network_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HabitServiceImp extends HabitService {
+class HabitServiceImplementation extends HabitService {
   static const String lastDateOfUpdateKey = 'lastDateOfUpdateKey@example.com';
   static const int dayMilis = 24 * 60 * 60 * 1000;
 
   HabitDatabaseRepository _databaseRepository;
   HabitNetworkRepository _networkRepository;
 
-  HabitServiceImp(this._databaseRepository, this._networkRepository) {
+  HabitServiceImplementation(this._databaseRepository, this._networkRepository) {
     trySyncWithServer();
   }
 
@@ -49,7 +49,7 @@ class HabitServiceImp extends HabitService {
 
   @override
   Future<bool> doneHabit(HabitModel localHabit) async {
-    var dateTime = DateTime.now();
+    final DateTime dateTime = DateTime.now();
     localHabit.doneDates.add(dateTime);
 
     try {
@@ -97,7 +97,7 @@ class HabitServiceImp extends HabitService {
       habit.serverId = serverId;
       return true;
     } catch (e) {
-      habit.dateOfUpdate = DateTime.now();
+
     } finally {
       await _databaseRepository.addOrUpdateHabitModel(habit);
     }

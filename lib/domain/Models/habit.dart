@@ -27,9 +27,13 @@ class HabitModel {
       this.count = 1,
       List<DateTime>? doneDates,
       DateTime? dateOfUpdate}) {
-    if (doneDates != null) this._doneDates = doneDates;
+    if (doneDates != null) {
+      this._doneDates = doneDates;
+    }
 
-    if (dateOfUpdate != null) this.dateOfUpdate = dateOfUpdate;
+    if (dateOfUpdate != null) {
+      this.dateOfUpdate = dateOfUpdate;
+    }
   }
 }
 

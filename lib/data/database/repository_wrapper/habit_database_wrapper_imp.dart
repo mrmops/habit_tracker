@@ -5,11 +5,11 @@ import 'package:habit_tracker/data/database/habit_database_interface.dart';
 import 'package:habit_tracker/infostructure/base_mapper.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
-class HabitDatabaseWrapperImp extends HabitDatabaseRepository {
+class HabitDatabaseWrapperImplementation extends HabitDatabaseRepository {
   HabitDataBase _habitDataBase;
   BaseMapper<HabitModel, Habit> _mapper;
 
-  HabitDatabaseWrapperImp(this._habitDataBase, this._mapper);
+  HabitDatabaseWrapperImplementation(this._habitDataBase, this._mapper);
 
   @override
   Stream<List<HabitModel>> watchAllHabitModels() {

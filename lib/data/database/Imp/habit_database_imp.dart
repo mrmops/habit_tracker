@@ -28,8 +28,8 @@ class Habits extends Table {
 }
 
 @UseMoor(tables: [Habits])
-class HabitDataBaseImp extends _$HabitDataBaseImp implements HabitDataBase {
-  HabitDataBaseImp()
+class HabitDataBaseImplementation extends _$HabitDataBaseImp implements HabitDataBase {
+  HabitDataBaseImplementation()
       : super(FlutterQueryExecutor.inDatabaseFolder(
             path: 'habitDb.sqlite', logStatements: true));
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:habit_tracker/app/ui/HabitsDetails/HabitAddOrEditPage.dart';
+import 'package:habit_tracker/app/RouteController/route_controller.dart';
 import 'package:habit_tracker/app/ui/HabitsList/MainPage.dart';
 import 'package:habit_tracker/data/database/Imp/habit_database_imp.dart';
 import 'package:habit_tracker/data/database/habit_database_interface.dart';
@@ -21,7 +21,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'domain/Models/habit.dart';
 import 'infostructure/base_mapper.dart';
 
-Future<void> main() async {
+void main() {
   runApp(MyApp());
 }
 
@@ -33,19 +33,19 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<BaseMapper<HabitModel, Habit>>(
             create: (context) => HabitDatabaseMapper()),
         RepositoryProvider<HabitDataBase>(
-            create: (context) => HabitDataBaseImp()),
+            create: (context) => HabitDataBaseImplementation()),
         RepositoryProvider<HabitDatabaseRepository>(
             create: (context) =>
-                HabitDatabaseWrapperImp(context.read(), context.read())),
+                HabitDatabaseWrapperImplementation(context.read(), context.read())),
         RepositoryProvider<RetrofitClient>(
             create: (context) => RetrofitConfigurationHelper.retrofitInstance),
         RepositoryProvider<BaseMapper<HabitModel, HabitDto>>(
             create: (context) => HabitDtoMapper()),
         RepositoryProvider<HabitNetworkRepository>(
             create: (context) =>
-                NetworkRepositoryImp(context.read(), context.read())),
+                NetworkRepositoryImplementation(context.read(), context.read())),
         RepositoryProvider<HabitService>(
-            create: (context) => HabitServiceImp(
+            create: (context) => HabitServiceImplementation(
                   context.read<HabitDatabaseRepository>(),
                   context.read<HabitNetworkRepository>(),
                 )),
@@ -66,19 +66,7 @@ class MyApp extends StatelessWidget {
           const Locale('en', ''),
           const Locale('ru', ''),
         ],
-        onGenerateRoute: (setting) {
-          switch (setting.name) {
-            case MainPage.routeKey:
-              return MaterialPageRoute(builder: (_) => MainPage());
-            case HabitAddOrEditPage.routingKey:
-              return MaterialPageRoute(
-                  builder: (_) =>
-                      HabitAddOrEditPage(habitId: setting.arguments as int?));
-            default:
-              return MaterialPageRoute(
-                  builder: (_) => Text('Неизвестная траница'));
-          }
-        },
+        onGenerateRoute: RouteController.onGenerateRoute,
       ),
     );
   }

@@ -1,15 +1,16 @@
 import 'package:habit_tracker/data/network/dtos/date_time_dto.dart';
 import 'package:habit_tracker/data/network/dtos/habit_dto.dart';
 import 'package:habit_tracker/data/network/Retrofit/retrofit_client.dart';
+import 'package:habit_tracker/data/network/dtos/habits_list_dto.dart';
 import 'package:habit_tracker/domain/Models/habit.dart';
 import 'package:habit_tracker/domain/interfaces/habit_network_repository.dart';
 import 'package:habit_tracker/infostructure/base_mapper.dart';
 
-class NetworkRepositoryImp extends HabitNetworkRepository {
-  RetrofitClient _retrofitClient;
-  BaseMapper<HabitModel, HabitDto> _mapper;
+class NetworkRepositoryImplementation extends HabitNetworkRepository {
+  final RetrofitClient _retrofitClient;
+  final BaseMapper<HabitModel, HabitDto> _mapper;
 
-  NetworkRepositoryImp(this._retrofitClient, this._mapper);
+  NetworkRepositoryImplementation(this._retrofitClient, this._mapper);
 
   @override
   Future<String> addHabit(HabitModel dto) async =>
@@ -25,7 +26,7 @@ class NetworkRepositoryImp extends HabitNetworkRepository {
 
   @override
   Future<List<HabitModel>> getHabits() async {
-    var habitsListDto = (await _retrofitClient.getHabits());
+    final HabitsListDto habitsListDto = (await _retrofitClient.getHabits());
     if (habitsListDto.habits == null) return List.empty();
 
     return _mapper.mapIterable(habitsListDto.habits!).toList();

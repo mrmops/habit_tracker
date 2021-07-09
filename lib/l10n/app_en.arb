@@ -1,0 +1,26 @@
+{
+    "helloWorld": "Hello World!",
+    "@helloWorld": {
+      "description": "A message with a formatted int parameter"
+    },
+    "goodRepsLeft": "{count,plural, other{Worth doing {count} more times}}",
+    "@goodRepsLeft": {
+      "description": "Reps left message",
+      "placeholders": {
+        "count": {
+
+        }
+      }
+    },
+    "badRepsLeft": "{count,plural, other{You can do it {count} more times}}",
+        "@badRepsLeft": {
+          "description": "Reps left message",
+          "placeholders": {
+            "count": {
+
+            }
+          }
+        },
+    "stopDoingItBad" :"Stop doing it!",
+    "stopDoingItGood" :"You are breathtaking!"
+}
